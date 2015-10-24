@@ -293,7 +293,10 @@
   (str "clj-wikipedia-" (uuid/v1)))
 
 (defn handle-message [irc s]
-  (println (:params s)))
+  (let [source (-> s :params first)
+        clean-text (clojure.string/replace (:text s)
+                                           #"[\x02\x1F\x0F\x16]|\x03(\d\d?(,\d\d?)?)?" "")]
+    (println source clean-text)))
 
 (defn lang->channel [l]
   (str "#" l ".wikipedia"))
