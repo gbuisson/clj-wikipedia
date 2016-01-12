@@ -301,14 +301,14 @@
 (defn lang->channel [l]
   (str "#" l ".wikipedia"))
 
-(defn listen-one [lang]
+(defn listen [langs]
 
-  (println "listen: " lang)
+  (println "listen: " langs)
   (let [connection (irc/connect
                     server
                     port
                     (nickname) :callbacks {:privmsg handle-message})]
-    (irc/join connection (lang->channel lang))))
+    (do (apply irc/join (concat [connection] (map lang->channel langs))))))
 
 (defn -main []
-  (dorun (pmap listen-one langs)))
+  (listen langs))
